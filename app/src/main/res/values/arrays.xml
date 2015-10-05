@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="medication_list">
+        <item>Advate</item>
+        <item>Alphanate</item>
+        <item>AlphaNine SD</item>
+        <item>Amicar</item>
+        <item>Bebulin</item>
+        <item>Bebulin VH</item>
+        <item>BeneFix</item>
+        <item>DDAVP (intravenous)</item>
+        <item>DDAVP (oral)</item>
+        <item>DDAVP (spray)</item>
+        <item>Fanhdi</item>
+        <item>Feiba</item>
+        <item>Feiba NF</item>
+        <item>GreenGene</item>
+        <item>Haemate P</item>
+        <item>Helixate FS</item>
+        <item>Helixate NexGen</item>
+        <item>Hemofil M</item>
+        <item>Humate-P</item>
+        <item>Koate DVI</item>
+        <item>Kogenate Bayer</item>
+        <item>Kogenate FS</item>
+        <item>Lysteda</item>
+        <item>Minirin</item>
+        <item>Monoclate-P</item>
+        <item>Mononine</item>
+        <item>Nanotiv</item>
+        <item>Nonafact</item>
+        <item>Novoseven</item>
+        <item>Novoseven RT</item>
+        <item>Octanate</item>
+        <item>Octanine</item>
+        <item>OctanineF</item>
+        <item>Octavi SDOptimum</item>
+        <item>Profilnine SD</item>
+        <item>Recombinate</item>
+        <item>Refacto AF</item>
+        <item>RiaSTAP</item>
+        <item>Rixubis</item>
+        <item>Stimate</item>
+        <item>Wilate</item>
+        <item>Xyntha</item>
+        <item>@string/none_medication</item>
+    </string-array>
+
+    <string-array name="body_parts">
+        <item>@string/ankle_left</item>
+        <item>@string/ankle_right</item>
+        <item>@string/arm_left</item>
+        <item>@string/arm_right</item>
+        <item>@string/back</item>
+        <item>@string/chest</item>
+        <item>@string/ear</item>
+        <item>@string/elbow_left</item>
+        <item>@string/elbow_right</item>
+        <item>@string/finger</item>
+        <item>@string/foot_left</item>
+        <item>@string/foot_right</item>
+        <item>@string/forearm_left</item>
+        <item>@string/forearm_right</item>
+        <item>@string/hand_left</item>
+        <item>@string/hand_right</item>
+        <item>@string/head</item>
+        <item>@string/hip_left</item>
+        <item>@string/hip_right</item>
+        <item>@string/knee_left</item>
+        <item>@string/knee_right</item>
+        <item>@string/leg_left</item>
+        <item>@string/leg_right</item>
+        <item>@string/mouth</item>
+        <item>@string/nose</item>
+        <item>@string/psoas_left</item>
+        <item>@string/psoas_right</item>
+        <item>@string/other_bodypart</item>
+        <item>@string/shoulder_left</item>
+        <item>@string/shoulder_right</item>
+        <item>@string/stomach</item>
+        <item>@string/thigh_left</item>
+        <item>@string/thigh_right</item>
+        <item>@string/thumb_left</item>
+        <item>@string/thumb_right</item>
+        <item>@string/toe</item>
+        <item>@string/wrist_left</item>
+        <item>@string/wrist_right</item>
+    </string-array>
+
+    <string-array name="bleed_reason">
+        <item>@string/bleed_reason_spontaneous</item>
+        <item>@string/bleed_reason_injury</item>
+    </string-array>
+
+    <string-array name="bleed_severity">
+        <item>@string/bleed_severity_mild</item>
+        <item>@string/bleed_severity_moderate</item>
+        <item>@string/bleed_severity_severe</item>
+    </string-array>
+
+</resources>
