@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mToolbar = buildActionBarToolbar(getString(R.string.title_fragment_infusion),true);
+        mToolbar = buildActionBarToolbar(getString(R.string.app_name),true);
         mTitle = mDrawerTitle = getTitle();
 
         // load saved navigation state if present
@@ -120,11 +120,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
         item.setChecked(true);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        selectDrawerItem(id);
+        mNavItemId = item.getItemId();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        selectDrawerItem(mNavItemId);
         return true;
     }
 
