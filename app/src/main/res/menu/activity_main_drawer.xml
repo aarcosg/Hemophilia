@@ -8,8 +8,8 @@
         <item android:id="@+id/nav_bleed"
             android:icon="@drawable/ic_action_bleed"
             android:title="@string/bleed" />
-        <item android:id="@+id/nav_reminder"
+<!--        <item android:id="@+id/nav_reminder"
             android:icon="@drawable/ic_alarm_24dp"
-            android:title="@string/reminder" />
+            android:title="@string/reminder" />-->
     </group>
 </menu>
