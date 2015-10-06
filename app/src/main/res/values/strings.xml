@@ -13,8 +13,8 @@
     <string name="title_activity_add_bleed">Add bleed</string>
     <string name="title_activity_edit_bleed">Edit bleed</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="infusion">Infusion</string>
     <string name="bleed">Bleed</string>
     <string name="bleed_reason">Reason</string>
@@ -29,8 +29,8 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="description">Description</string>
-    <string name="time_string">%1$s:%2$s</string>
-    <string name="date_string">%1$s/%2$s/%3$s</string>
+    <string name="time_string" translatable="false">%1$s:%2$s</string>
+    <string name="date_string" translatable="false">%1$s/%2$s/%3$s</string>
     <string name="select_time">Select time</string>
     <string name="select_date">Select date</string>
     <string name="lot_number">Lot number</string>
