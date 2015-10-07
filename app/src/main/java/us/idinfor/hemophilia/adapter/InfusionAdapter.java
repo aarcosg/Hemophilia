@@ -30,6 +30,7 @@ public class InfusionAdapter extends RecyclerView.Adapter<InfusionAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Inflar el layout de los elementos del adaptador y seleccionar los listeners de los eventos a los que responderá
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.infusion_item,parent,false);
         ViewHolder holder = new ViewHolder(v);
         holder.itemView.setOnClickListener(this);
@@ -39,9 +40,12 @@ public class InfusionAdapter extends RecyclerView.Adapter<InfusionAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /* Esta función se llama por cada elemento del adaptador.
+        *  Inicializar las Views del elemento del adaptador con los datos del modelo que se está representando.
+        * */
         Infusion infusion = infusions.get(position);
         holder.mMedication.setText(infusion.getMedication());
-        holder.mDose.setText(infusion.getDose().toString());
+        holder.mDose.setText(String.format("%s",infusion.getDose()));
         holder.mLotNumber.setText(infusion.getLotNumber());
         holder.mTime.setText(DateUtils.getRelativeTimeSpanString(infusion.getTime().getValue(),System.currentTimeMillis(),DateUtils.DAY_IN_MILLIS));
         holder.itemView.setTag(infusion);
@@ -75,12 +79,18 @@ public class InfusionAdapter extends RecyclerView.Adapter<InfusionAdapter.ViewHo
 
     @Override
     public void onClick(View v) {
+        /* Evento que se ejecutará al hacer click sobre un elemento del adaptador.
+        *  En este caso, se abre un nuevo Activity desde el que se podrá editar el elemento y guardarlo en el servidor.
+        */
         Infusion infusion = (Infusion) v.getTag();
         EditInfusionActivity.launch((Activity) v.getContext(), new us.idinfor.hemophilia.model.Infusion(infusion));
     }
 
     @Override
     public boolean onLongClick(final View v) {
+        /* Evento que se ejecutará al mantener pulsado un elemento del adaptador.
+        *  En este caso, se muestra por pantalla un Dialog que pregunta al usuario si desea eliminar el elemento seleccionado.
+        * */
         final AlertDialog.Builder mDialog = new AlertDialog.Builder(v.getContext());
         mDialog.setTitle(v.getContext().getResources().getString(R.string.delete));
         mDialog.setMessage(v.getContext().getResources().getString(R.string.ask_delete_infusion));
@@ -108,6 +118,7 @@ public class InfusionAdapter extends RecyclerView.Adapter<InfusionAdapter.ViewHo
         return false;
     }
 
+    // Clase estática que declara e inicializa las Views que componen un elemento del adaptador.
     static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView mMedication;

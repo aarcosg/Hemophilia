@@ -7,7 +7,7 @@ import us.idinfor.hemophilia.model.Bleed;
 
 public class SaveBleedAsyncTask extends AsyncTask<Void,Void,Bleed>{
 
-    private Bleed bleed;
+    Bleed bleed;
 
     public SaveBleedAsyncTask(Bleed bleed){
         this.bleed = bleed;

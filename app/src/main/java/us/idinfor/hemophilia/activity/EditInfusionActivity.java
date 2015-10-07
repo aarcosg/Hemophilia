@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -49,7 +50,9 @@ public class EditInfusionActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Seleccionar el layout del Activity
         setContentView(R.layout.activity_edit_infusion);
+        // Inicializar elementos gráficos de la interfaz
         initUI();
     }
 
@@ -74,43 +77,52 @@ public class EditInfusionActivity extends BaseActivity {
         mDate = (TextView)findViewById(R.id.dateTV);
         infusionTime = Calendar.getInstance();
 
-        if(getIntent().getExtras() == null){
-            //Add mode
-            mToolbar = buildActionBarToolbar(getString(R.string.title_activity_add_infusion), true);
-            mTime.setText(getString(R.string.time_string, infusionTime.get(Calendar.HOUR_OF_DAY), String.format("%02d", infusionTime.get(Calendar.MINUTE))));
-            mTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
-                }
-            });
+        mTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TimePickerFragment().show(getSupportFragmentManager(), "timePicker");
+            }
+        });
 
-            mDate.setText(getString(R.string.date_string,
-                    infusionTime.get(Calendar.DAY_OF_MONTH),
-                    infusionTime.get(Calendar.MONTH)+1,
-                    infusionTime.get(Calendar.YEAR)));
-            mDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new DatePickerFragment().show(getSupportFragmentManager(),"datePicker");
-                }
-            });
+        mDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerFragment().show(getSupportFragmentManager(),"datePicker");
+            }
+        });
 
-        }else{
-            //Edit mode
+        /* Este Activity sirve tanto para añadir una nueva inyección como para editar una antigua.
+        *  Para ello se comprueba si en el Intent que ha lanzado este Activity viene un objeto Infusion.
+        *  En caso afirmativo, se cargan los datos del objeto en las Views correspondientes.
+        *  En caso negativo, se dejan los valores por defecto.
+        * */
+        if(getIntent().getExtras() != null && getIntent().hasExtra(EXTRA_INFUSION)){
+            //Modo editar inyección
             mToolbar = buildActionBarToolbar(getString(R.string.title_activity_edit_infusion),true);
             infusion = getIntent().getParcelableExtra(EXTRA_INFUSION);
             if(infusion != null){
                 loadInfusion();
             }
+        }else{
+            //Modo añadir inyección
+            mToolbar = buildActionBarToolbar(getString(R.string.title_activity_add_infusion), true);
+            mTime.setText(getString(R.string.time_string, infusionTime.get(Calendar.HOUR_OF_DAY), String.format("%02d", infusionTime.get(Calendar.MINUTE))));
+            mDate.setText(getString(R.string.date_string,
+                    infusionTime.get(Calendar.DAY_OF_MONTH),
+                    infusionTime.get(Calendar.MONTH) + 1,
+                    infusionTime.get(Calendar.YEAR)));
+
         }
     }
 
+    /*
+    * DialogFragment encargado de mostrar una ventana emergente en la que se seleccionan la hora y los minutos.
+    * */
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -128,11 +140,14 @@ public class EditInfusionActivity extends BaseActivity {
         }
     }
 
+    /*
+    * DialogFragment encargado de mostrar una ventana emergente en la que se selecciona fecha.
+    * */
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
+        public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
             int year = c.get(Calendar.YEAR);
@@ -154,15 +169,25 @@ public class EditInfusionActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Se infla el menú.
         getMenuInflater().inflate(R.menu.edit_infusion, menu);
-        menu.findItem(R.id.action_save).setEnabled(!disableSaveBtn);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        /* Se deshabilita el botón de Guardar cuando se está realizando
+        *  un acceso al servidor para evitar más de un click.
+        * */
+        menu.findItem(R.id.action_save).setEnabled(!disableSaveBtn);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save:
+                // Llamar a @saveInfusion() cuando se pulsa en el botón Guardar
                 saveInfusion();
                 break;
         }
@@ -175,12 +200,17 @@ public class EditInfusionActivity extends BaseActivity {
         mDescription.setText(null);
     }
 
+    /*
+    * Función encargada de comprobar los datos introducidos por el usuario
+    * y enviarlos al Google Cloud Datastore.
+    * */
     private void saveInfusion() {
-        // Reset errors.
+        // Resetear errores
         mDose.setError(null);
         mLotNumber.setError(null);
         mDescription.setError(null);
 
+        // Obtener los valores introducidos por el usuario
         String dose = mDose.getText().toString();
         String lotNumber = mLotNumber.getText().toString();
         String description = mDescription.getText().toString();
@@ -188,30 +218,32 @@ public class EditInfusionActivity extends BaseActivity {
         boolean cancel = false;
         View focusView = null;
 
-        //Check for valid dose
+        // Comprobar si la dosis es válida
         if(TextUtils.isEmpty(dose) || Integer.valueOf(dose) <= 0){
             mDose.setError(getString(R.string.error_invalid_dose));
             focusView = mDose;
             cancel = true;
         }
 
-        //Check for valid lot number
+        // Comprobar si el número de lote es válido
         if(TextUtils.isEmpty(lotNumber)){
             mLotNumber.setError(getString(R.string.error_invalid_lot_number));
             focusView = mLotNumber;
             cancel = true;
         }
 
-        //Check for valid description
+        // Comprobar si la descripción es válida
         if(TextUtils.isEmpty(description)){
             mDescription.setError(getString(R.string.error_invalid_description));
             focusView = mDescription;
             cancel = true;
         }
 
+        // Si alguno de los datos no es válido, se pone el foco sobre él.
         if(cancel){
             focusView.requestFocus();
         }else{
+            // En caso contrario se crea un objeto del modelo Infusion de backend y se manda.
             if(infusion == null){
                 infusion = new Infusion();
             }
@@ -221,13 +253,16 @@ public class EditInfusionActivity extends BaseActivity {
             infusion.setLotNumber(lotNumber);
             infusion.setTime(infusionTime.getTime());
             infusion.setDescription(description);
+
             new SaveInfusionAsyncTask(infusion.getBackendInfusion()){
                 @Override
                 protected void onPreExecute() {
                     super.onPreExecute();
                     mProgressBar.setVisibility(View.VISIBLE);
                     disableSaveBtn = true;
-                    //Disable save button to avoid double click
+                    /* La función invalidateOptionsMenu llama a onPrepareOptionsMenu
+                     * para deshabilitar el botón de guardar
+                     * */
                     invalidateOptionsMenu();
                     Utils.hideKeyboard(mToolbar);
                 }
@@ -239,9 +274,14 @@ public class EditInfusionActivity extends BaseActivity {
                     disableSaveBtn = false;
                     invalidateOptionsMenu();
                     if(infusion != null){
+                        // Si la inyección se ha guardado correctamente, cerramos este Activity y volvemos al principal.
                         finish();
                     }else{
-                        Snackbar.make(mToolbar, getString(R.string.error_item_not_saved, getString(R.string.infusion)), Snackbar.LENGTH_LONG).show();
+                        // En caso contrario, mostramos un Snackbar informando al usuario de que se ha producido un error.
+                        Snackbar.make(
+                                mToolbar,
+                                getString(R.string.error_item_not_saved, getString(R.string.infusion)),
+                                Snackbar.LENGTH_LONG).show();
                     }
                 }
             }.execute();
@@ -249,8 +289,9 @@ public class EditInfusionActivity extends BaseActivity {
     }
 
     private void loadInfusion(){
+        // Cargar los datos del objeto Infusion en las Views
         mMedication.setSelection(Utils.getSpinnerIndex(mMedication, infusion.getMedication()));
-        mDose.setText(infusion.getDose().toString());
+        mDose.setText(String.format("%s", infusion.getDose()));
         mLotNumber.setText(infusion.getLotNumber());
         infusionTime.setTimeInMillis(infusion.getTime().getTime());
         mDate.setText(getString(R.string.date_string,

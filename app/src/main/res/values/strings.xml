@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Hemophilia</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="none_medication">None</string>
 
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">@string/app_name</string>
     <string name="title_fragment_infusion">@string/infusion</string>
     <string name="title_fragment_bleed">@string/bleed</string>
     <string name="title_activity_add_infusion">Add infusion</string>

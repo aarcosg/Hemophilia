@@ -144,7 +144,7 @@ public class InfusionEndpoint {
                 .filter("deviceId",deviceId)
                 .order("-time");
         QueryResultIterator<Infusion> queryIterator = query.iterator();
-        List<Infusion> infusionList = new ArrayList<Infusion>();
+        List<Infusion> infusionList = new ArrayList<>();
         while (queryIterator.hasNext()) {
             infusionList.add(queryIterator.next());
         }

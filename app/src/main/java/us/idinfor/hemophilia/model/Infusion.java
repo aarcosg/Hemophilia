@@ -7,7 +7,11 @@ import android.os.Parcelable;
 import com.google.api.client.util.DateTime;
 
 import java.util.Date;
-
+/*
+* Clase que implementa el modelo Inyección. Tiene los mismos atributos que la clase
+* desarrollada en backend pero en este caso implementa la intarface Parcelable para que
+* se puedan mandar objetos de este tipo a través de Intents.
+* */
 public class Infusion implements Parcelable{
 
     Long id;
