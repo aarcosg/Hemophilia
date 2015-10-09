@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import us.idinfor.hemophilia.model.Bleed;
+import us.idinfor.hemophilia.backend.bleedApi.model.Bleed;
 
 
 public class BleedAdapter extends RecyclerView.Adapter<BleedAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
