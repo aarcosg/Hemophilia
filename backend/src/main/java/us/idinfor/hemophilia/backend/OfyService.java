@@ -12,6 +12,7 @@ public class OfyService {
 
     static {
         factory().register(Infusion.class);
+        factory().register(Bleed.class);
     }
 
     public static Objectify ofy() {

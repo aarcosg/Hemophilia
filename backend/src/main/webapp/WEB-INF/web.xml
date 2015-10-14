@@ -13,8 +13,8 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>
-                us.idinfor.hemophilia.backend.InfusionEndpoint</param-value>
+            <param-value>us.idinfor.hemophilia.backend.InfusionEndpoint,
+                us.idinfor.hemophilia.backend.BleedEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

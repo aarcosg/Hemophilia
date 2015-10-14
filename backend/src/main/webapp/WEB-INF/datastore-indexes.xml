@@ -9,4 +9,13 @@
         <property name="medication" direction="asc" />
         <property name="time" direction="desc" />
     </datastore-index>
+    <datastore-index kind="Bleed" ancestor="false">
+        <property name="deviceId" direction="asc" />
+        <property name="time" direction="desc" />
+    </datastore-index>
+    <datastore-index kind="Bleed" ancestor="false">
+        <property name="deviceId" direction="asc" />
+        <property name="medication" direction="asc" />
+        <property name="time" direction="desc" />
+    </datastore-index>
 </datastore-indexes>
