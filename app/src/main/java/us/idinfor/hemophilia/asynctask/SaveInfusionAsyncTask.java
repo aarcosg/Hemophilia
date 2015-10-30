@@ -33,7 +33,7 @@ public class SaveInfusionAsyncTask extends AsyncTask<Void,Void,Infusion>{
         try {
             if(infusion.getId() == null){
                 //Add infusion
-                newInfusion = infusionApi.insert(this.infusion).execute();
+                newInfusion = infusionApi.insert(infusion).execute();
             }else{
                 //Update infusion
                 newInfusion = infusionApi.update(infusion.getId(),infusion).execute();

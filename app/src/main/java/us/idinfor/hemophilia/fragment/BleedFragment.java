@@ -4,12 +4,24 @@ package us.idinfor.hemophilia.fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import us.idinfor.hemophilia.R;
+import us.idinfor.hemophilia.Utils;
 import us.idinfor.hemophilia.activity.EditBleedActivity;
+import us.idinfor.hemophilia.adapter.BleedAdapter;
+import us.idinfor.hemophilia.asynctask.LoadBleedsAsyncTask;
+import us.idinfor.hemophilia.backend.bleedApi.model.Bleed;
+import us.idinfor.hemophilia.decorator.SimpleDividerItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +29,10 @@ import us.idinfor.hemophilia.activity.EditBleedActivity;
  * create an instance of this fragment.
  */
 public class BleedFragment extends Fragment {
+
+    RecyclerView mRecyclerView;
+    BleedAdapter mAdapter;
+    ProgressBar mProgressBar;
 
     public static BleedFragment newInstance() {
         BleedFragment fragment = new BleedFragment();
@@ -48,7 +64,15 @@ public class BleedFragment extends Fragment {
             }
         });
 
-        //TODO Inicializar RecyclerView para mostrar el listado de hemorragias. Hay que implementar el Adapter BleedAdapter.
+        mProgressBar = (ProgressBar)rootView.findViewById(R.id.progressBar);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.bleedRV);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new BleedAdapter(new ArrayList<Bleed>());
+        mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
     }
@@ -59,8 +83,23 @@ public class BleedFragment extends Fragment {
         loadBleeds();
     }
 
-    //TODO Función que recupera del servidor las hemorragias y las carga en el RecyclerView
     private void loadBleeds(){
-        //TODO Implementar LoadBleedsAsyncTask para conectar con el servidor
+        new LoadBleedsAsyncTask(Utils.getUDID(getActivity())) {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(List<Bleed> bleeds) {
+                super.onPostExecute(bleeds);
+                mProgressBar.setVisibility(View.GONE);
+                if (bleeds != null && !bleeds.isEmpty()) {
+                    mAdapter.clear();
+                    mAdapter.addAll(bleeds);
+                }
+            }
+        }.execute();
     }
 }
