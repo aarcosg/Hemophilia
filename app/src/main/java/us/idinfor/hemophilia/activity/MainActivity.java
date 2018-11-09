@@ -146,7 +146,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void selectDrawerItem(int itemId) {
         Fragment fragment = null;
-        String title = getString(R.string.app_name);
         // Crear el Fragment correspondiente al elemento del menú de navegación seleccionado
         switch (itemId) {
             case R.id.nav_infusion:
@@ -161,7 +160,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if(fragment != null){
             // Poner el título del Fragment seleccionado en el Toolbar
-            mToolbar.setTitle(title);
+            if(getSupportActionBar()!=null)
+            getSupportActionBar().setTitle(mTitle);
             // Mostrar el Fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame,fragment).commit();
